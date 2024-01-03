@@ -21,6 +21,10 @@
     .fond .icone {
       color: white;
     }
+    .table .etat-vie-mort {
+      color: red;  /* Changez la couleur en fonction de votre style préféré */
+      font-weight: bold;
+    }
   </style>
 
   <table class="table">
@@ -32,9 +36,8 @@
         <th scope="col">Ad</th>
         <th scope="col">Mana</th>
         <th scope="col">Pv</th>
-        <th scope="col">Supprimer</th>
-        <th scope="col">Modifier</th>
-        <th scope="col">Attaquer</th>
+        <th scope="col" colspan="3">Action</th>
+        <th scope="col">Etat du Player</th>
       </tr>
     </thead>
 
@@ -61,6 +64,13 @@
             <a href="/player/show/{{ player.id }}" class="" role="button" aria-pressed="true">
               <i class="fas fa-user-tie"></i>
             </a>
+          </td>
+          <td class="{% if player.pv <= 0 %}etat-vie-mort{% endif %}">
+            {% if player.pv <= 0 %}
+              Mort
+            {% else %}
+              En vie
+            {% endif %}
           </td>
         </tr>
       {% endfor %}
