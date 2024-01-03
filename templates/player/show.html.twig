@@ -1,19 +1,51 @@
 {% extends 'base.html.twig' %}
- 
-{% block title %}Hello PlayerControlerController!{% endblock %}
- 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
- 
-<div class="example-wrapper">
-<p>name: {{ player.name }}</p>
-<p>ad: {{ player.ad }}</p>
-<p>ap: {{ player.ap }}</p>
-<p>ap: {{ player.ap }}</p>
-<p>pv: {{ player.pv }}</p>
-<p>mana: {{ player.mana }}</p>
-</div>
-{% endblock %}
+
+    {% block body %}
+
+        <style>
+            .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+            .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+        </style>
+        
+        <div class="example-wrapper">
+            <p>name: {{ player.name }}</p>
+            <p>ad: {{ player.ad }}</p>
+            <p>ap: {{ player.ap }}</p>
+            <p>pv: {{ player.pv }}</p>
+            <p>mana: {{ player.mana }}</p>
+        </div>
+
+        <div class="container">
+            <table class="table">
+            <thead>
+                <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Ap</th>
+                <th scope="col">Ad</th>
+                <th scope="col">Mana</th>
+                <th scope="col">Pv</th>
+                <th scope="col">Attaque AD</th>
+                <th scope="col">Attaque AP</th>
+                </tr>
+            </thead>
+                <tbody>
+                    {% for otherPlayer in players %}
+                        {% if otherPlayer.id != player.id %}
+                            <tr>
+                                <td>{{otherPlayer.id}}</td>
+                                <td>{{otherPlayer.name}}</td>
+                                <td>{{otherPlayer.ap}}</td>
+                                <td>{{otherPlayer.ad}}</td>
+                                <td>{{otherPlayer.mana}}</td>
+                                <td>{{otherPlayer.pv}}</td>
+                                <td><a href="{{ path('app_player_damage', {'id': player.id, 'targetId': otherPlayer.id, 'type': 'ad'}) }}" class="" role="button" aria-pressed="true">Attaque AD</a></td>
+                                <td><a href="{{ path('app_player_damage', {'id': player.id, 'targetId': otherPlayer.id, 'type': 'ap'}) }}" class="" role="button" aria-pressed="true">Attaque AP</a></td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    {% endblock %}

@@ -40,17 +40,20 @@ class PlayerController extends AbstractController
     }
 
     #[Route('/player/formulairePlayer', name: 'app_player_formulaire')]
-    public function formulairePlayer () 
+    public function formulairePlayer ()
     {
         return $this->render('player/formulaire.html.twig');
     }
 
     #[Route('/player/show/{id}', name: 'app_player_show')] 
-    public function show(Player $player) 
+    public function show(Player $player, EntityManagerInterface $entityManager) 
     {
          // On affiche les informations dans notre page twig de Player
+        $players = $entityManager->getRepository(Player::class)->findAll();
+
          return $this->render('player/show.html.twig', [
             'player' => $player,
+            'players' => $players,
         ]);
     }
 
@@ -93,11 +96,63 @@ class PlayerController extends AbstractController
 
                 // Charge l'entity
                 $entityManager->flush();
-                
+
             return $this->redirectToRoute('app_player_show_all');
         }
         return $this->render('player/update.html.twig', [
             'player' => $player,
         ]);
+    }
+
+    #[Route('/player/damage/{id}/{targetId}/{type}', name: 'app_player_damage')]
+    public function damage(Request $request, EntityManagerInterface $entityManager, Player $player, $id, $targetId, $type): Response
+    {
+        if ($player->getPv() <= 0) {
+            // Gérez le cas où le joueur attaquant a 0 points de vie
+            $this->addFlash('error', 'Impossible d\'attaquer avec 0 points de vie.');
+        } else {
+            // Récupérez le joueur cible à partir de la base de données (par son ID)
+            $targetPlayer = $entityManager->getRepository(Player::class)->find($targetId);
+
+            if ($targetPlayer->getPv() <= 0) {
+                // Gérez le cas où le joueur cible a déjà 0 points de vie
+                $this->addFlash('error', 'Impossible d\'attaquer un joueur ayant 0 points de vie.');
+            } else {
+                // Effectuez l'attaque en fonction du type (AD ou AP)
+                if ($type === 'ad') {
+                    // Logique d'attaque AD
+                    $damage = $player->getAd(); // Utilisez la valeur AD du joueur attaquant
+                } elseif ($type === 'ap') {
+                    // Logique d'attaque AP
+                    $damage = $player->getAp(); // Utilisez la valeur AP du joueur attaquant
+                } else {
+                    // Gérez les autres cas si nécessaire
+                    throw new \Exception("Type d'attaque non pris en charge");
+                }
+
+                // Vérifiez si le joueur attaquant a suffisamment de mana pour lancer l'attaque
+                $manaCost = 30;
+                if ($player->getMana() >= $manaCost) {
+                    // Appliquez les dégâts au joueur cible
+                    $targetPlayer->setPv($targetPlayer->getPv() - $damage); // Supprime les points de vie
+
+                    // Déduisez le coût en mana de l'attaquant
+                    $player->setMana($player->getMana() - $manaCost);
+
+                    // Enregistrez les modifications dans la base de données
+                    $entityManager->flush();
+                } else {
+                    // Gérez le cas où le joueur n'a pas assez de mana
+                    $this->addFlash('error', 'Pas assez de mana pour lancer l\'attaque.');
+                }
+            }
+        }
+        
+
+        // Récupérez la page de référence depuis la requête
+        $referrer = $request->headers->get('referer');
+
+        // Redirigez l'utilisateur vers la page de référence ou vers la page de détails du joueur attaquant si la référence est vide
+        return $this->redirect($referrer ?: $this->generateUrl('app_player_show', ['id' => $player->getId()]));
     }
 }
