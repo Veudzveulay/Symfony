@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+  {% block body %}
+
+    <div class="container">
+    <h1> Création de votre pet </h1>
+      <form action="{{ path ('app_pets_create', {'playerId': player.id} ) }}" method="post" >
+
+        <div class="form-group">
+          <label for="exampleInputEmail1">Nom</label>
+          <input type="text" class="form-control" name="inputName" id="inputName" placeholder="Entrer votre nom">
+        </div>
+
+        <div class="form-group">
+          <label for="exampleInputEmail1">Expérience de votre Pet</label>
+          <input type="text" class="form-control" name="inputXp" id="inputXp" placeholder="Entrer l'xp">
+        </div>
+
+        <div class="form-group">
+          <label for="exampleInputEmail1">Niveau de votre pet</label>
+          <input type="text" class="form-control" name="inputNiveau" id="inputNiveau" placeholder="Entrer le niveau">
+        </div>
+
+        <div class="form-group">
+          <label for="exampleInputPassword1">Ap de votre pet</label>
+          <input type="number" class="form-control" name="inputAp" id="inputAp" placeholder="Ap du Player">
+        </div>
+
+        <div class="form-group">
+          <label for="exampleInputPassword1">Ad de votre pet</label>
+          <input type="number" class="form-control" name="inputAd" id="inputAd" placeholder="Ad du Player">
+        </div>
+
+        <div class="form-group">
+          <label for="exampleInputPassword1">Mana de votre pet</label>
+          <input type="number" class="form-control" name="inputMana" id="inputMana" placeholder="Mana du player">
+        </div>
+
+        <div class="form-group">
+          <label for="exampleInputPassword1">Pv de votre pet</label>
+          <input type="number" class="form-control" name="inputPv" id="inputPv" placeholder="Pv du player">
+        </div>
+
+        <div class="form-group">
+          <label for="exampleInputPassword1">Propriétaire du pet</label>
+          <input type="text" class="form-control" name="inputPlayer" id="inputPlayer" value="{{ player.name }}" readonly>
+          <!-- Vous pouvez également ajouter un champ caché pour stocker l'ID du joueur -->
+          <input type="hidden" name="inputPlayerId" value="{{ player.id }}">
+        </div>
+
+        <div class="form-group">
+          <label for="exampleInputPassword1">Race du pet</label>
+          <select class="form-control" name="inputRace" id="inputRace">
+              {% for race in races %}
+                  <option value="{{ race.id }}">{{ race.nom }}</option>
+              {% endfor %}
+          </select>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Envoyer</button>
+      </form>
+    </div>
+  {% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+  {% block body %}
+
+    <div class="container">
+    <h1> Création de race de pet </h1>
+      <form action="{{path('app_race_create')}}" method="POST" >
+        <div class="form-group">
+          <label for="exampleInputEmail1">Nom de la race</label>
+          <input type="text" class="form-control" name="inputRace" id="inputRace" placeholder="Entrer le nom de la race">
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Envoyer</button>
+      </form>
+    </div>
+  {% endblock %}

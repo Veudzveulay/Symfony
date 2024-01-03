@@ -38,9 +38,9 @@ class Pet
     #[ORM\Column]
     private ?int $pv = null;
 
-    #[ORM\ManyToOne(inversedBy: 'pets')]
+    #[ORM\ManyToOne(inversedBy: 'Pets')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?player $owner = null;
+    private ?Player $owner = null;
 
     public function getId(): ?int
     {
@@ -143,12 +143,12 @@ class Pet
         return $this;
     }
 
-    public function getOwner(): ?player
+    public function getOwner(): ?Player
     {
         return $this->owner;
     }
 
-    public function setOwner(?player $owner): static
+    public function setOwner(?Player $owner): static
     {
         $this->owner = $owner;
 

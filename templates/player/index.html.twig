@@ -9,12 +9,12 @@
 
     .table td,
     .table th {
-      padding: 10px;
+      padding: 10px ;
     }
 
     .fond {
       background-color: green;
-      padding: 10px;
+      padding: 10px 15px;
       border-radius: 10px;
     }
 
@@ -36,6 +36,7 @@
         <th scope="col">Ad</th>
         <th scope="col">Mana</th>
         <th scope="col">Pv</th>
+        <th scope="col">Pets</th>
         <th scope="col" colspan="3">Action</th>
         <th scope="col">Etat du Player</th>
       </tr>
@@ -50,6 +51,11 @@
           <td>{{ player.ad }}</td>
           <td>{{ player.mana }}</td>
           <td>{{ player.pv }}</td>
+          <td>
+            <a href="{{ path('app_pets_forms', {'playerId': player.id}) }}" class="fond" role="button" aria-pressed="true">
+              <i class="fas fa-plus icone"></i>
+            </a>
+          </td>
           <td>
             <a href="/player/delete/{{ player.id }}" class="" role="button" aria-pressed="true">
               <i class="fas fa-trash"></i>
@@ -76,10 +82,4 @@
       {% endfor %}
     </tbody>
   </table>
-
-  <div class="d-flex justify-content-center align-item-center mt-5">
-    <a href="{{ path('app_player_formulaire') }}" class="fond" role="button" aria-pressed="true">
-      <i class="fas fa-plus icone"></i>
-    </a>
-  </div>
 {% endblock body %}
