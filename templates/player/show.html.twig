@@ -1,17 +1,64 @@
 {% extends 'base.html.twig' %}
 
     {% block body %}
+        <style>
+            thead,
+            tbody {
+            text-align: center;
+            }
+            .table .etat-vie-mort {
+            color: red;  /* Changez la couleur en fonction de votre style préféré */
+            font-weight: bold;
+            }
+        </style>
   
-         <div class="container">
-         <h1> Attaque d'un autre Player </h1>
-            <p>name: {{ player.name }}</p>
-            <p>ad: {{ player.ad }}</p>
-            <p>ap: {{ player.ap }}</p>
-            <p>pv: {{ player.pv }}</p>
-            <p>mana: {{ player.mana }}</p>
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    <h1> Informations de {{player.name}} </h1>
+
+                    <p>Nom du Player: {{ player.name }}</p>
+                    <p>Ad du Player {{player.name}} : {{ player.ad }}</p>
+                    <p>Ap du Player {{player.name}} : {{ player.ap }}</p>
+                    <p>Pv du Player {{player.name}} : {{ player.pv }}</p>
+                    <p>Mana du Player {{player.name}} : {{ player.mana }}</p>
+                </div>
+                <div class="col-6">
+                    <h1> Pets de {{ player.name }} </h1>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">Nom</th>
+                                <th scope="col">XP</th>
+                                <th scope="col">Niveau</th>
+                                <th scope="col">AD</th>
+                                <th scope="col">AP</th>
+                                <th scope="col">Mana</th>
+                                <th scope="col">PV</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pet in player.pets %}
+                                <tr>
+                                    <td>{{ pet.id }}</td>
+                                    <td>{{ pet.name }}</td>
+                                    <td>{{ pet.xp }}</td>
+                                    <td>{{ pet.niveau }}</td>
+                                    <td>{{ pet.ad }}</td>
+                                    <td>{{ pet.ap }}</td>
+                                    <td>{{ pet.mana }}</td>
+                                    <td>{{ pet.pv }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
         <div class="container">
+            <h1> Attaquer un Player </h1>
             <table class="table">
             <thead>
                 <tr>
@@ -23,6 +70,8 @@
                 <th scope="col">Pv</th>
                 <th scope="col">Attaque AD</th>
                 <th scope="col">Attaque AP</th>
+                <th scope="col">Etat du Player</th>
+
                 </tr>
             </thead>
                 <tbody>
@@ -37,6 +86,13 @@
                                 <td>{{otherPlayer.pv}}</td>
                                 <td><a href="{{ path('app_player_damage', {'id': player.id, 'targetId': otherPlayer.id, 'type': 'ad'}) }}" class="" role="button" aria-pressed="true">Attaque AD</a></td>
                                 <td><a href="{{ path('app_player_damage', {'id': player.id, 'targetId': otherPlayer.id, 'type': 'ap'}) }}" class="" role="button" aria-pressed="true">Attaque AP</a></td>
+                                <td class="{% if otherPlayer.pv <= 0 %}etat-vie-mort{% endif %}">
+                                    {% if otherPlayer.pv <= 0 %}
+                                    Mort
+                                    {% else %}
+                                    En vie
+                                    {% endif %}
+                                </td>
                             </tr>
                         {% endif %}
                     {% endfor %}
