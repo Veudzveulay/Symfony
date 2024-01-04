@@ -25,7 +25,9 @@
         {% endfor %}
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
-            <a class="navbar-brand" href="#">Mon Site</a>
+            {% if app.user %}
+                <p>Connecté en tant que {{ app.user.email }}</p>
+            {% endif %}            
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>

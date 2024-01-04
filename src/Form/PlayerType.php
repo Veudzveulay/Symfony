@@ -20,20 +20,6 @@ class PlayerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('image', FileType::class, [
-                'label' => 'Choisir une image',
-                'required' => false, // Le champ n'est pas obligatoire
-                'data_class' => null,
-                'constraints' => [
-                    new File([
-                        'maxSize' => '1024k',
-                        'mimeTypes' => [
-                            'image/*',
-                        ],
-                        'mimeTypesMessage' => 'Veuillez télécharger une image valide.',
-                    ]),
-                ],
-            ])
             ->add('name', TextType::class,  [
                 'label' => 'Entrer le nom du Player',
                 'required' => true,

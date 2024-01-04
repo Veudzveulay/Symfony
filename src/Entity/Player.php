@@ -30,11 +30,8 @@ class Player
     #[ORM\Column]
     private ?int $pv = null;
 
-    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Pet::class)]
+    #[ORM\OneToMany(mappedBy: 'player', targetEntity: Pet::class)]
     private Collection $pets;
-
-    #[ORM\Column(length: 255)]
-    private ?string $image = null;
 
     #[ORM\ManyToOne(inversedBy: 'players')]
     #[ORM\JoinColumn(nullable: false)]
@@ -122,7 +119,7 @@ class Player
     {
         if (!$this->pets->contains($pet)) {
             $this->pets->add($pet);
-            $pet->setOwner($this);
+            $pet->setPlayer($this);
         }
 
         return $this;
@@ -132,22 +129,10 @@ class Player
     {
         if ($this->pets->removeElement($pet)) {
             // set the owning side to null (unless already changed)
-            if ($pet->getOwner() === $this) {
-                $pet->setOwner(null);
+            if ($pet->getPlayer() === $this) {
+                $pet->setPlayer(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(string $image): static
-    {
-        $this->image = $image;
 
         return $this;
     }

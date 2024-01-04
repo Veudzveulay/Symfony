@@ -55,7 +55,7 @@ class PetsController extends AbstractController
             ->setPv((int)$pv)
             ->setMana((int)$mana)
             ->setRace($raceId)
-            ->setOwner($player);
+            ->setPlayer($player);
         $entityManager->persist($pet);
         $entityManager->flush();
         
@@ -97,7 +97,7 @@ class PetsController extends AbstractController
             // Appliquez les changements dans la base de données
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_pet_show', ['id' => $pet->getId()]);
+            return $this->redirectToRoute('app_pets_show', ['id' => $pet->getId()]);
         }
         return $this->render('/pets/formSym.html.twig', [
             'form' => $form->createView(),

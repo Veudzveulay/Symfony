@@ -10,8 +10,7 @@ use App\Form\PlayerType;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Security\Core\Security;
 
 class PlayerController extends AbstractController
 {
@@ -61,6 +60,15 @@ class PlayerController extends AbstractController
             // Accédez aux données du formulaire avec getData()
             $player = $form->getData();
 
+            // Récupérez l'utilisateur actuellement connecté
+            $user = $this->getUser();
+
+            // Assurez-vous que l'utilisateur est connecté avant de l'associer aux joueurs
+            if ($user) {
+                // Associez l'utilisateur aux joueurs
+                $player->setUser($user);
+            }
+
             $this->addFlash(
                 'notice',
                 'Le formulaire a bien été saisi !'
@@ -105,8 +113,17 @@ class PlayerController extends AbstractController
     #[Route('/player/all', name: 'app_player_show_all')]
     public function showAll (EntityManagerInterface $entityManager) 
     {
-        $players = $entityManager->getRepository(Player::class)->findAll();
-        return $this->render('player/index.html.twig', ['players' => $players]);
+        // Récupérez l'utilisateur actuel
+        $user = $this->getUser();
+        // Si l'utilisateur est connecté
+        if ($user) {
+            // Récupérez les joueurs associés à cet utilisateur
+            $players = $entityManager->getRepository(Player::class)->findBy(['user' => $user]);
+
+            return $this->render('player/index.html.twig', ['players' => $players]);
+        }
+        // Changez app_home par la route que vous souhaitez
+        return $this->redirectToRoute('app_register'); 
     }
 
     #[Route('/player/update/{id}', name: 'app_player_update')]
