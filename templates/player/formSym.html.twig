@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+    {% block body %}
+
+        <div class="container">
+
+            <form action="{{ path('app_player_createForms') }}" method="post">
+            {% form_theme form _self %}
+
+            <h1> Création de votre Player </h1>
+
+            {{ form_start(form) }}
+
+            {{ form_widget(form) }}
+
+            {{ form_end(form) }}
+            </form>
+    </div>
+
+    {% endblock %}

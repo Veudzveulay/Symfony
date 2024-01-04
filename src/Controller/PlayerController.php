@@ -6,9 +6,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Player;
+use App\Form\PlayerType;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+
 
 class PlayerController extends AbstractController
 {
@@ -45,6 +47,33 @@ class PlayerController extends AbstractController
         return $this->render('player/formulaire.html.twig');
     }
 
+    #[Route('/player/createSymfony', name: 'app_player_createForms')]
+    public function createAction(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $player = new Player();
+        $form = $this->createForm(PlayerType::class, $player);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            // Accédez aux données du formulaire avec getData()
+            $player = $form->getData();
+
+            // Utilisez l'EntityManager pour persister l'objet Player
+            // Persist permet d'enregisreter le nouveau Player qui veitn d'etre créer
+            $entityManager->persist($player);
+            // Appliquez les changements dans la base de données
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_player_show', ['id' => $player->getId()]);
+        }
+
+        return $this->render('/player/formSym.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+    
     #[Route('/player/show/{id}', name: 'app_player_show')] 
     public function show(Player $player, EntityManagerInterface $entityManager) 
     {
