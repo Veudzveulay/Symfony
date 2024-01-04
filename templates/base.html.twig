@@ -17,6 +17,12 @@
         {% endblock %}
     </head>
     <body>
+        {# read and display just one flash message type #}
+        {% for message in app.flashes('notice') %}
+            <div class="flash-notice p-4 bg-info fs-3 text-white">
+                {{ message }}
+            </div>
+        {% endfor %}
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
             <a class="navbar-brand" href="#">Mon Site</a>

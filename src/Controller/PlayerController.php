@@ -63,6 +63,11 @@ class PlayerController extends AbstractController
             // Accédez aux données du formulaire avec getData()
             $player = $form->getData();
 
+            $this->addFlash(
+                'notice',
+                'Le formulaire a bien été saisi !'
+            );
+
             // Utilisez l'EntityManager pour persister l'objet Player
             // Persist permet d'enregisreter le nouveau Player qui veitn d'etre créer
             $entityManager->persist($player);
