@@ -10,7 +10,8 @@ use App\Form\PlayerType;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PlayerController extends AbstractController
 {
@@ -52,10 +53,7 @@ class PlayerController extends AbstractController
     {
         $player = new Player();
 
-
         $form = $this->createForm(PlayerType::class, $player);
-
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
