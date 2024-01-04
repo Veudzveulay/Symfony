@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Player;
 use App\Entity\Pet;
 use App\Entity\Race;
+use App\Form\PetType;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -73,6 +74,33 @@ class PetsController extends AbstractController
         return $this->render('pets/create.html.twig', [
             'races' => $races,
             'player' =>$player,
+        ]);
+    }
+
+    #[Route('/pets/createSymfony', name: 'app_pets_createForms')]
+    public function createAction(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $pet = new Pet();
+        
+        $form = $this->createForm(PetType::class, $pet);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            // Accédez aux données du formulaire avec getData()
+            $pet = $form->getData();
+
+            // Utilisez l'EntityManager pour persister l'objet Player
+            // Persist permet d'enregisreter le nouveau Player qui vient d'etre créer
+            $entityManager->persist($pet);
+            // Appliquez les changements dans la base de données
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_pet_show', ['id' => $pet->getId()]);
+        }
+        return $this->render('/pets/formSym.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 

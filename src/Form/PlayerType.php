@@ -9,6 +9,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
 
 class PlayerType extends AbstractType
 {
@@ -17,18 +19,32 @@ class PlayerType extends AbstractType
         $builder
             ->add('name', TextType::class,  [
                 'label' => 'Entrer le nom du Player',
+                'required' => true,
+                'constraints' => [
+                    new NotBlank(['message'=> 'Le nom du Player ne peut pas être vide']),
+                    new Length([
+                        'min' => 1,
+                        'max' => 20,
+                        'minMessage' => 'Le nom doit contenir au moins {{ limit }} caractères.',
+                        'maxMessage' => 'Le nom ne peut pas dépasser {{ limit }} caractères.',
+                    ]),
+                ],
             ])
             ->add('mana', IntegerType::class,  [
                 'label' => 'Entrer le mana du Player',
+                'required' => true,
             ])
             ->add('ad', IntegerType::class,  [
                 'label' => 'Entrer l\'AD du Player',
+                'required' => true,
             ])
             ->add('ap', IntegerType::class,  [
                 'label' => 'Entrer l\'AP nom du Player',
+                'required' => true,
             ])
             ->add('pv', IntegerType::class,  [
                 'label' => 'Entrer les PV du Player',
+                'required' => true,
             ])
             ->add('Envoyer', SubmitType::class)
         ;

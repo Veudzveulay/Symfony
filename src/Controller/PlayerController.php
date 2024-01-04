@@ -51,7 +51,10 @@ class PlayerController extends AbstractController
     public function createAction(Request $request, EntityManagerInterface $entityManager): Response
     {
         $player = new Player();
+
+
         $form = $this->createForm(PlayerType::class, $player);
+
 
         $form->handleRequest($request);
 
@@ -73,7 +76,7 @@ class PlayerController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-    
+
     #[Route('/player/show/{id}', name: 'app_player_show')] 
     public function show(Player $player, EntityManagerInterface $entityManager) 
     {
